@@ -5,6 +5,8 @@ namespace HotelBooking.Domain.Entities;
 public class Attachment : BaseEntity
 {
     public int Id { get; set; }
-    public string File { get; set; } = string.Empty;
-    public int HotelId { get; set; } // many-to-one with hotel / attachment is dependent (child)
+    public required string Name { get; set; }
+    public required string File { get; set; }
+    public int HotelId { get; set; } // many-to-one with hotel
+     public Hotel Hotel { get; set; } = null!;
 }

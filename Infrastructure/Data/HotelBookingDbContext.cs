@@ -11,4 +11,56 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
     public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Location> Locations => Set<Location>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Hotel one-to-one Location
+        modelBuilder.Entity<Hotel>()
+            .HasOne(h => h.Location)
+            .WithOne(l => l.Hotel)
+            .HasForeignKey<Location>(l => l.HotelId)
+            .IsRequired(true); // Every Location must be related to a Hotel
+
+        // Hotel one-to-many Room
+        modelBuilder.Entity<Hotel>()
+            .HasMany(h => h.Rooms)
+            .WithOne(r => r.Hotel)
+            .HasForeignKey(r => r.HotelId)
+            .IsRequired(true); // Every Room must be related to a Hotel
+
+        // Hotel one-to-many Attachment
+        modelBuilder.Entity<Hotel>()
+            .HasMany(h => h.Attachments)
+            .WithOne(a => a.Hotel)
+            .HasForeignKey(a => a.HotelId)
+            .IsRequired(true); // Every Attachment must be related to a Hotel
+
+        // Category one-to-many Hotel
+        modelBuilder.Entity<Category>()
+            .HasMany(h => h.Hotels)
+            .WithOne(h => h.Category)
+            .HasForeignKey(h => h.CategoryId)
+            .IsRequired(true); // Every Hotel must be related to a Category
+
+        // User one-to-many Booking
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.Bookings)
+            .WithOne(b => b.User)
+            .HasForeignKey(b => b.UserId)
+            .IsRequired(true); // Every Booking must be related to a User
+
+        // Room one-to-many Booking
+        modelBuilder.Entity<Room>()
+            .HasMany(r => r.Bookings)
+            .WithOne(b => b.Room)
+            .HasForeignKey(b => b.RoomId)
+            .IsRequired(true); // Every Booking must be related to a Room (of a Hotel)
+
+        // Hotel many-to-many Feature
+        modelBuilder.Entity<Hotel>()
+            .HasMany(h => h.Features)
+            .WithMany(f => f.Hotels);
+
+        base.OnModelCreating(modelBuilder);
+    }
 }
