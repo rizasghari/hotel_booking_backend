@@ -23,6 +23,7 @@
     <Folder Include="App/Mappings/" />
     <Folder Include="App/Services/" />
     <Folder Include="Domain/IRepositories/" />
+    <Folder Include="Infrastructure/Data/Database/" />
     <Folder Include="Infrastructure/Repositories/" />
     <Folder Include="Infrastructure/Services/" />
     <Folder Include="Presentation/" />
