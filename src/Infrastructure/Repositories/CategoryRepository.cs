@@ -30,14 +30,34 @@ public class CategoryRepository : ICategoryRepository
         }
     }
 
-    public async Task<IEnumerable<Category>> GetAllAsync()
+    public async Task<(IEnumerable<Category>, int total)> GetAllAsync(int page, int size, bool desc, string search)
     {
-        return await _dbContext.Categories.ToListAsync();
+        IQueryable<Category> allCategoriesQuery = _dbContext.Categories.Where(c => c.DeletedAt == null);
+        IQueryable<Category> categoriesQuery = _dbContext.Categories.Where(c => c.DeletedAt == null);
+
+        if (!string.IsNullOrEmpty(search))
+        {
+            categoriesQuery = categoriesQuery.Where(c => c.Name.Contains(search));
+        }
+
+        categoriesQuery = desc
+            ? categoriesQuery.OrderByDescending(c => c.Id)
+            : categoriesQuery.OrderBy(c => c.Id);
+
+        var categories = await categoriesQuery
+            .Skip((page - 1) * size)
+            .Take(size)
+            .ToListAsync();
+
+        var total = await allCategoriesQuery.CountAsync();
+
+        return (categories, total);
     }
 
     public async Task<Category?> GetByIdAsync(int id)
     {
-        return await _dbContext.Categories.FirstOrDefaultAsync(category => category.Id == id);
+        return await _dbContext.Categories
+            .FirstOrDefaultAsync(category => category.Id == id && category.DeletedAt == null);
     }
 
     public async Task UpdateAsync(Category category)
@@ -63,12 +83,19 @@ public class CategoryRepository : ICategoryRepository
     {
         try
         {
-            await _dbContext.Categories
-                .Where(category => category.Id == id)
-                .ExecuteDeleteAsync();
+            var existingCategory = await _dbContext.Categories.FindAsync(id)
+                ?? throw new NotFoundException("Category not found");
+
+            existingCategory.DeletedAt = DateTime.UtcNow;
+
+            _dbContext.Entry(existingCategory!)
+                .CurrentValues
+                .SetValues(existingCategory);
+            await _dbContext.SaveChangesAsync();
         }
-        catch
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             throw;
         }
     }

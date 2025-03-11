@@ -21,11 +21,12 @@ public class CategoryService : ICategoryService
         return await _categoryRepository.AddAsync(createCategoryDto.ToEntity());
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetAllAsync()
+    public async Task<(IEnumerable<CategoryDto> list, int total)> GetAllAsync(int page, int size, bool desc, string search)
     {
-        var categories = await _categoryRepository.GetAllAsync();
+        (IEnumerable<Category> categories, int total) = await _categoryRepository.GetAllAsync(page, size, desc, search);
 
-        return categories.Select(categoryEntity => categoryEntity.ToDto());
+        var convertedCategories = categories.Select(categoryEntity => categoryEntity.ToDto()).ToList();
+        return (convertedCategories, total);
     }
 
     public async Task<CategoryDto?> GetByIdAsync(int id)

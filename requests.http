@@ -8,10 +8,12 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:5212/v1/categories
+GET http://localhost:5212/v1/categories?page=1&size=10&desc=false&search=t
 
 ###
+GET http://localhost:5212/v1/categories/3
 
+###
 PUT http://localhost:5212/v1/categories/12
 Content-Type: application/json
 
@@ -20,4 +22,4 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:5212/v1/categories/12
+DELETE http://localhost:5212/v1/categories/11
