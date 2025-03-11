@@ -1,0 +1,13 @@
+################## Categories ##################
+
+POST http://localhost:5212/v1/categories
+Content-Type: application/json
+
+{
+    "name": "Villa"
+}
+
+###
+GET http://localhost:5212/v1/categories
+
+###

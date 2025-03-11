@@ -1,3 +1,4 @@
+using HotelBooking.Api.Endpoints;
 using HotelBooking.DI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,14 +8,11 @@ builder.RegisterDependencies();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
-
-app.MapGet("/", () => "Hi there!");
-
+app.RegisterEndpoints();
 app.Run();

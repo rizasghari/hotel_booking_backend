@@ -1,5 +1,9 @@
 using System;
+using HotelBooking.App.IServices;
+using HotelBooking.App.Services;
+using HotelBooking.Domain.IRepositories;
 using HotelBooking.Infrastructure.Data;
+using HotelBooking.Infrastructure.Repositories;
 
 namespace HotelBooking.DI;
 
@@ -10,6 +14,12 @@ public static class DI
         // Sqlite Database
         var connString = builder.Configuration.GetConnectionString("HotelBooking");
         builder.Services.AddSqlite<HotelBookingDbContext>(connString);
+
+        // Repositories
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+        // Services
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
 
         return builder;
     }
