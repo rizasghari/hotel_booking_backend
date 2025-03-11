@@ -18,4 +18,6 @@ public class User : AuditableEntity
     [Column(Order = 6)] public required string PasswordHash { get; set; }
     public ICollection<Booking> Bookings { get; } = [];
     public ICollection<Rating> Ratings { get; set; } = [];
+    public ICollection<UserFavoriteHotel> FavoriteHotels { get; set; } = [];
+
 }

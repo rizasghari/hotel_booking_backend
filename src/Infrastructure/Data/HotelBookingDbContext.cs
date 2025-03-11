@@ -16,6 +16,7 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Booking> Bookings { get; set; }
     public DbSet<Rating> Ratings { get; set; }
+    public DbSet<UserFavoriteHotel> UserFavoriteHotels { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,9 +24,25 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
         modelBuilder.Entity<User>()
             .HasAlternateKey(u => u.Email);
 
-        // Unique rating per booking and user.
+        // Unique rating per booking and user
         modelBuilder.Entity<Rating>()
             .HasAlternateKey(r => new { r.BookingId, r.UserId });
+
+        // Unique favorite per user and hotel
+        modelBuilder.Entity<UserFavoriteHotel>()
+            .HasKey(uf => new { uf.UserId, uf.HotelId });
+
+        // User one-to-many UserFavoriteHotel
+        modelBuilder.Entity<UserFavoriteHotel>()
+            .HasOne(uf => uf.User)
+            .WithMany(u => u.FavoriteHotels)
+            .HasForeignKey(uf => uf.UserId);
+
+        // Hotel one-to-many UserFavoriteHotel
+        modelBuilder.Entity<UserFavoriteHotel>()
+            .HasOne(uf => uf.Hotel)
+            .WithMany(h => h.FavoritedByUsers)
+            .HasForeignKey(uf => uf.HotelId);
 
         // Booking one-to-many Rating
         modelBuilder.Entity<Rating>()
