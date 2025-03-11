@@ -1,11 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelBooking.Domain.Entities;
 
-public class Feature : BaseEntity
+[Table("Features")]
+[Comment("Hotel features")]
+public class Feature : AuditableEntity
 {
-    public int Id { get; set; }
-    public required string Name { get; set; }
-    public string? Icon { get; set; }
+    [Column(Order = 1)][MaxLength(100)] public required string Name { get; set; }
+    [Column("IconPath", Order = 2)] public string? Icon { get; set; }
     public ICollection<Hotel> Hotels { get; } = []; // many-to-many with hotel
 }

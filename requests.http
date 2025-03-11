@@ -4,21 +4,21 @@ POST http://localhost:5212/v1/categories
 Content-Type: application/json
 
 {
-    "name": "Another one new"
+    "name": null
 }
 
 ###
 GET http://localhost:5212/v1/categories?page=1&size=10&desc=false&search=
 
 ###
-GET http://localhost:5212/v1/categories/3
+GET http://localhost:5212/v1/categories/7
 
 ###
-PUT http://localhost:5212/v1/categories/12
+PUT http://localhost:5212/v1/categories/6
 Content-Type: application/json
 
 {
-    "name": "Another 2025"
+    "name": ""
 }
 
 ###

@@ -2,6 +2,7 @@ using System;
 using HotelBooking.App.Dtos;
 using HotelBooking.App.IServices;
 using HotelBooking.App.Mappings;
+using HotelBooking.src.Api.Filters;
 using HotelBooking.src.App.Dtos;
 using HotelBooking.src.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -63,7 +64,7 @@ public static class Endpoints
         {
             var createdCategory = await categoryService.AddAsync(createCategoryDto);
             return Results.Created($"/v1/category/{createdCategory.Id}", createdCategory.ToCategoryResponseDto());
-        }).WithParameterValidation();
+        }).AddEndpointFilter<CreateCategoryFilter>();
 
         // UPDATE
         category.MapPut("/{id}", async (int id, UpdateCategoryDto updateCategoryDto, ICategoryService categoryService) =>

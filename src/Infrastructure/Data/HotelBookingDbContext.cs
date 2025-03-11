@@ -1,19 +1,48 @@
 using System;
 using HotelBooking.Domain.Entities;
+using HotelBooking.src.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBooking.Infrastructure.Data;
 
 public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> options) : DbContext(options)
 {
-    public DbSet<Hotel> Hotels => Set<Hotel>();
-    public DbSet<Feature> Features => Set<Feature>();
-    public DbSet<Attachment> Attachments => Set<Attachment>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Location> Locations => Set<Location>();
+    public DbSet<Hotel> Hotels { get; set; }
+    public DbSet<Feature> Features { get; set; }
+    public DbSet<Attachment> Attachments { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Location> Locations { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Room> Rooms { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<Rating> Ratings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // User unique email
+        modelBuilder.Entity<User>()
+            .HasAlternateKey(u => u.Email);
+
+        // Unique rating per booking and user.
+        modelBuilder.Entity<Rating>()
+            .HasAlternateKey(r => new { r.BookingId, r.UserId });
+
+        // Booking one-to-many Rating
+        modelBuilder.Entity<Rating>()
+            .HasOne(r => r.Booking)
+            .WithMany(b => b.Ratings)
+            .HasForeignKey(r => r.BookingId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // User one-to-many Rating
+        modelBuilder.Entity<Rating>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.Ratings)
+            .HasForeignKey(r => r.UserId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
+
         // Hotel one-to-one Location
         modelBuilder.Entity<Hotel>()
             .HasOne(h => h.Location)
@@ -78,7 +107,7 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
 
     private void UpdateAuditFields()
     {
-        var entries = ChangeTracker.Entries<BaseEntity>();
+        var entries = ChangeTracker.Entries<AuditableEntity>();
 
         foreach (var entry in entries)
         {

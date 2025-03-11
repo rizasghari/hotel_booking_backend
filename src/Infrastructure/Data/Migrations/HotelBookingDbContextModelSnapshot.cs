@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace HotelBooking.Infrastructure.Data.Migrations
+namespace HotelBooking.src.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(HotelBookingDbContext))]
     partial class HotelBookingDbContextModelSnapshot : ModelSnapshot
@@ -36,7 +36,8 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -46,14 +47,18 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.Property<string>("File")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("IconPath")
+                        .HasColumnOrder(2);
 
                     b.Property<int>("HotelId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -62,17 +67,22 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachments", t =>
+                        {
+                            t.HasComment("Hotel file attachments");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Booking", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<int>("BookingStatus")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(5);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -81,19 +91,23 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(4);
 
                     b.Property<int>("RoomId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime>("StarDate")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(3);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
@@ -101,14 +115,18 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Booking");
+                    b.ToTable("Bookings", t =>
+                        {
+                            t.HasComment("Hotel bookings");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -117,25 +135,33 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("IconPath")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", t =>
+                        {
+                            t.HasComment("Hotel categories");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Feature", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -144,31 +170,42 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Icon")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("IconPath")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Features");
+                    b.ToTable("Features", t =>
+                        {
+                            t.HasComment("Hotel features");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Hotel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(5);
 
                     b.Property<string>("Cover")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("CoverPath")
+                        .HasColumnOrder(3);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -177,14 +214,19 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<decimal>("PerNightPrice")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(4);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -193,26 +235,36 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Hotels");
+                    b.ToTable("Hotels", t =>
+                        {
+                            t.HasComment("Hotels");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(5);
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(4);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -224,10 +276,12 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Latitude")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnOrder(1);
 
                     b.Property<double>("Longitude")
-                        .HasColumnType("REAL");
+                        .HasColumnType("REAL")
+                        .HasColumnOrder(2);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -237,17 +291,22 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                     b.HasIndex("HotelId")
                         .IsUnique();
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", t =>
+                        {
+                            t.HasComment("Locations of hotels");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.Room", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<int>("Capacity")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(2);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -256,11 +315,13 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("HotelId")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
@@ -269,14 +330,18 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Room");
+                    b.ToTable("Rooms", t =>
+                        {
+                            t.HasComment("Rooms of hotels");
+                        });
                 });
 
             modelBuilder.Entity("HotelBooking.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -286,33 +351,85 @@ namespace HotelBooking.Infrastructure.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(1);
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(2);
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(6);
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnOrder(4);
 
                     b.Property<string>("ProfilePhoto")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ProfilePhotoPath")
+                        .HasColumnOrder(5);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.HasAlternateKey("Email");
+
+                    b.ToTable("Users", t =>
+                        {
+                            t.HasComment("Registered users");
+                        });
+                });
+
+            modelBuilder.Entity("HotelBooking.src.Domain.Entities.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(0);
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(3);
+
+                    b.Property<int>("Value")
+                        .HasColumnType("INTEGER")
+                        .HasColumnOrder(1);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("BookingId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("FeatureHotel", b =>
@@ -393,6 +510,30 @@ namespace HotelBooking.Infrastructure.Data.Migrations
                     b.Navigation("Hotel");
                 });
 
+            modelBuilder.Entity("HotelBooking.src.Domain.Entities.Rating", b =>
+                {
+                    b.HasOne("HotelBooking.Domain.Entities.Booking", "Booking")
+                        .WithMany("Ratings")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HotelBooking.Domain.Entities.User", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HotelBooking.Domain.Entities.Booking", b =>
+                {
+                    b.Navigation("Ratings");
+                });
+
             modelBuilder.Entity("HotelBooking.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Hotels");
@@ -415,6 +556,8 @@ namespace HotelBooking.Infrastructure.Data.Migrations
             modelBuilder.Entity("HotelBooking.Domain.Entities.User", b =>
                 {
                     b.Navigation("Bookings");
+
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,10 +1,10 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HotelBooking.Domain.Entities;
+namespace HotelBooking.src.Domain.Entities;
 
-public abstract class BaseEntity
+public class BaseEntity
 {
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
+    [Column(Order = 0)]
+    public int Id { get; set; }
 }
