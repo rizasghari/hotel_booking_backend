@@ -7,6 +7,7 @@ builder.Services.AddOpenApi();
 builder.RegisterDependencies();
 
 var app = builder.Build();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

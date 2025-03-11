@@ -1,7 +1,7 @@
-using System;
 using HotelBooking.Domain.Entities;
 using HotelBooking.Domain.IRepositories;
 using HotelBooking.Infrastructure.Data;
+using HotelBooking.src.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace HotelBooking.Infrastructure.Repositories;
@@ -44,7 +44,12 @@ public class CategoryRepository : ICategoryRepository
     {
         try
         {
-            _dbContext.Update(category);
+            var existingCategory = await _dbContext.Categories.FindAsync(category.Id) 
+                ?? throw new NotFoundException("Category not found");
+
+            _dbContext.Entry(existingCategory!)
+                .CurrentValues
+                .SetValues(category);
             await _dbContext.SaveChangesAsync();
         }
         catch (Exception e)
@@ -52,6 +57,5 @@ public class CategoryRepository : ICategoryRepository
             Console.WriteLine(e);
             throw;
         }
-
     }
 }

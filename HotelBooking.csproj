@@ -16,11 +16,4 @@
     <PackageReference Include="MinimalApis.Extensions" Version="0.11.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure/Data/Database/" />
-    <Folder Include="Infrastructure/Services/" />
-    <Folder Include="Api/Middlewares/" />
-    <Folder Include="src/" />
-  </ItemGroup>
-
 </Project>

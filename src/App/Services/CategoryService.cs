@@ -35,8 +35,8 @@ public class CategoryService : ICategoryService
         return category?.ToDto();
     }
 
-    public async Task UpdateCategoryAsync(UpdateCategoryDto updateCategoryDto)
+    public async Task UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto)
     {
-        await _categoryRepository.UpdateCategoryAsync(updateCategoryDto.ToEntity());
+        await _categoryRepository.UpdateCategoryAsync(updateCategoryDto.ToEntity(id));
     }
 }

@@ -4,10 +4,17 @@ POST http://localhost:5212/v1/categories
 Content-Type: application/json
 
 {
-    "name": "Villa"
+    "name": "Another one new"
 }
 
 ###
 GET http://localhost:5212/v1/categories
 
 ###
+
+PUT http://localhost:5212/v1/categories/12
+Content-Type: application/json
+
+{
+    "name": "Another 2025"
+}

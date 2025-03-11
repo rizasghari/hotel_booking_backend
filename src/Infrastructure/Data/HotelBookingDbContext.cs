@@ -89,11 +89,12 @@ public class HotelBookingDbContext(DbContextOptions<HotelBookingDbContext> optio
                     break;
 
                 case EntityState.Modified:
+                    entry.Property(e => e.CreatedAt).IsModified = false;
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
                     break;
 
                 case EntityState.Deleted:
-                    // For soft deletes: mark as modified and set DeletedAt
+                    // Soft delete
                     entry.State = EntityState.Modified;
                     entry.Entity.DeletedAt = DateTime.UtcNow;
                     break;

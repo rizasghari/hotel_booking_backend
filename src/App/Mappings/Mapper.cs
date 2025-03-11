@@ -42,9 +42,9 @@ public static class Mapper
         };
     }
 
-    public static Category ToEntity(this UpdateCategoryDto updateCategoryDto) {
+    public static Category ToEntity(this UpdateCategoryDto updateCategoryDto, int id) {
         return new Category {
-            Id = updateCategoryDto.Id,
+            Id = id,
             Name = updateCategoryDto.Name,
         };
     }
