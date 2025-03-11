@@ -37,7 +37,8 @@ public class CategoryRepository : ICategoryRepository
 
         if (!string.IsNullOrEmpty(search))
         {
-            categoriesQuery = categoriesQuery.Where(c => c.Name.Contains(search));
+            categoriesQuery = categoriesQuery    
+                .Where(c => EF.Functions.Like(c.Name, $"%{search}%"));
         }
 
         categoriesQuery = desc
