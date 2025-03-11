@@ -34,9 +34,9 @@ public static class Endpoints
                 Successful = true,
                 Data = new ApiPaginagionResponse<IEnumerable<CategoryDto>> {
                     Page = page,
-                    PageSize = size,
-                    Count = total,
-                    Data = categories
+                    Size = size,
+                    Total = total,
+                    List = categories
                 }
             });
         });
