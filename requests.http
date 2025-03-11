@@ -18,3 +18,6 @@ Content-Type: application/json
 {
     "name": "Another 2025"
 }
+
+###
+DELETE http://localhost:5212/v1/categories/12

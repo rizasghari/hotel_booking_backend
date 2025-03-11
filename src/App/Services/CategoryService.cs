@@ -37,6 +37,11 @@ public class CategoryService : ICategoryService
 
     public async Task UpdateCategoryAsync(int id, UpdateCategoryDto updateCategoryDto)
     {
-        await _categoryRepository.UpdateCategoryAsync(updateCategoryDto.ToEntity(id));
+        await _categoryRepository.UpdateAsync(updateCategoryDto.ToEntity(id));
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        await _categoryRepository.DeleteAsync(id);
     }
 }

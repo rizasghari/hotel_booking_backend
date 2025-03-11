@@ -69,6 +69,25 @@ public static class Endpoints
             }
         });
 
+        category.MapDelete("/{id}", async (int id, ICategoryService categoryService) =>
+        {
+            try
+            {
+                await categoryService.DeleteAsync(id);
+                return Results.NoContent();
+            }
+            catch (Exception e)
+            {
+                return Results.BadRequest(new ApiResponse<dynamic>
+                {
+                    Successful = false,
+                    Errors = [
+                        e.Message
+                    ]
+                });
+            }
+        });
+
         /* __________________ HOTELS __________________ */
 
         return app;

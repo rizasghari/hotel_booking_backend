@@ -40,11 +40,11 @@ public class CategoryRepository : ICategoryRepository
         return await _dbContext.Categories.FirstOrDefaultAsync(category => category.Id == id);
     }
 
-    public async Task UpdateCategoryAsync(Category category)
+    public async Task UpdateAsync(Category category)
     {
         try
         {
-            var existingCategory = await _dbContext.Categories.FindAsync(category.Id) 
+            var existingCategory = await _dbContext.Categories.FindAsync(category.Id)
                 ?? throw new NotFoundException("Category not found");
 
             _dbContext.Entry(existingCategory!)
@@ -55,6 +55,20 @@ public class CategoryRepository : ICategoryRepository
         catch (Exception e)
         {
             Console.WriteLine(e);
+            throw;
+        }
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        try
+        {
+            await _dbContext.Categories
+                .Where(category => category.Id == id)
+                .ExecuteDeleteAsync();
+        }
+        catch
+        {
             throw;
         }
     }
