@@ -1,7 +1,7 @@
 using System;
 using HotelBooking.App.Dtos;
 using HotelBooking.App.IServices;
-using HotelBooking.App.Mappings;
+using HotelBooking.src.App.Mappings;
 using HotelBooking.Domain.Entities;
 using HotelBooking.Domain.IRepositories;
 

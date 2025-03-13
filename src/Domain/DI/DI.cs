@@ -4,6 +4,10 @@ using HotelBooking.App.Services;
 using HotelBooking.Domain.IRepositories;
 using HotelBooking.Infrastructure.Data;
 using HotelBooking.Infrastructure.Repositories;
+using HotelBooking.src.App.IServices;
+using HotelBooking.src.App.Services;
+using HotelBooking.src.Domain.IRepositories;
+using HotelBooking.src.Infrastructure.Repositories;
 
 namespace HotelBooking.DI;
 
@@ -17,9 +21,11 @@ public static class DI
 
         // Repositories
         builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>();
 
         // Services
         builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
         return builder;
     }

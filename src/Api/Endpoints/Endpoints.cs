@@ -1,11 +1,13 @@
 using System;
 using HotelBooking.App.Dtos;
 using HotelBooking.App.IServices;
-using HotelBooking.App.Mappings;
+using HotelBooking.src.App.Mappings;
 using HotelBooking.src.Api.Filters;
 using HotelBooking.src.App.Dtos;
 using HotelBooking.src.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using HotelBooking.src.App.IServices;
+using HotelBooking.Domain.Entities;
 
 namespace HotelBooking.Api.Endpoints;
 
@@ -15,6 +17,62 @@ public static class Endpoints
     {
 
         var v1 = app.MapGroup("/v1");
+
+        /* __________________ AUTHENTICATION __________________ */
+
+        var authentication = v1.MapGroup("/auth");
+
+        // SIGNUP
+        authentication.MapPost("/signup", async (
+            SignupRequestDto createUserDto,
+            IAuthenticationService authenticationService
+        ) =>
+        {
+            var result = await authenticationService.SignupAsync(createUserDto);
+
+            if (result.IsSuccess)
+            {
+                return Results.Ok(new ApiResponse<SignupResponseDto>
+                {
+                    Successful = true,
+                    Data = result.Data?.ToSignupResponseDto()
+                });
+            }
+            else
+            {
+                return Results.BadRequest(new ApiResponse<SignupRequestDto>
+                {
+                    Successful = false,
+                    Errors = result.Errors
+                });
+            }
+        });
+
+        // LOGIN
+        authentication.MapPost("/login", async (
+            LoginRequestDto loginRequestDto,
+            IAuthenticationService authenticationService
+        ) =>
+        {
+            var result = await authenticationService.LoginAsync(loginRequestDto);
+
+            if (result.IsSuccess)
+            {
+                return Results.Ok(new ApiResponse<LoginResponseDto>
+                {
+                    Successful = true,
+                    Data = result.Data
+                });
+            }
+            else
+            {
+                return Results.BadRequest(new ApiResponse<LoginRequestDto>
+                {
+                    Successful = false,
+                    Errors = result.Errors
+                });
+            }
+        });
 
         /* __________________ CATEGORIES __________________ */
 
@@ -33,7 +91,8 @@ public static class Endpoints
             return Results.Ok(new ApiResponse<ApiPaginagionResponse<IEnumerable<CategoryDto>>>
             {
                 Successful = true,
-                Data = new ApiPaginagionResponse<IEnumerable<CategoryDto>> {
+                Data = new ApiPaginagionResponse<IEnumerable<CategoryDto>>
+                {
                     Page = page,
                     Size = size,
                     Total = total,

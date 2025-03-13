@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using HotelBooking.src.App.Dtos;
 
 public class GlobalExceptionMiddleware
 {
@@ -35,10 +36,9 @@ public class GlobalExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
-        var errorResponse = new
-        {
-            error = "Invalid JSON payload.",
-            details = "The JSON request body is missing required properties or is malformed."
+        var errorResponse = new ApiResponse<object> {
+            Successful = false,
+            Errors = ["Invalid JSON payload."]
         };
 
         return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
@@ -49,9 +49,9 @@ public class GlobalExceptionMiddleware
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        var errorResponse = new
-        {
-            error = "An unexpected error occurred."
+        var errorResponse = new ApiResponse<object> {
+            Successful = false,
+            Errors = ["An error occurred while processing the request."]
         };
 
         return context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
