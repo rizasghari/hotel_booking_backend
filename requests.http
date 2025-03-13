@@ -4,10 +4,10 @@ POST http://localhost:5212/v1/auth/signup
 Content-Type: application/json
 
 {
-    "firstName": "Reza",
-    "lastName": "Asghari",
-    "email": "mehmet@gmail.com",
-    "phoneNumber": "+905368375805",
+    "firstName": "Alper",
+    "lastName": "Kaya",
+    "email": "alper@gmail.com",
+    "phoneNumber": "+905368375806",
     "password": "159357"
 }
 
@@ -16,7 +16,7 @@ POST http://localhost:5212/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "mehmet@gmail.com",
+    "email": "alper@gmail.com",
     "password": "159357"
 }
 

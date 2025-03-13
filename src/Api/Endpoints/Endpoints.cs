@@ -22,6 +22,8 @@ public static class Endpoints
 
         var authentication = v1.MapGroup("/auth");
 
+        authentication.AllowAnonymous();
+
         // SIGNUP
         authentication.MapPost("/signup", async (
             SignupRequestDto createUserDto,
