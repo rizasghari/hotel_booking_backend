@@ -7,7 +7,6 @@ using HotelBooking.src.App.Dtos;
 using HotelBooking.src.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using HotelBooking.src.App.IServices;
-using HotelBooking.Domain.Entities;
 
 namespace HotelBooking.Api.Endpoints;
 
@@ -76,12 +75,17 @@ public static class Endpoints
             }
         });
 
+        /* #################### Admin #################### */
+
+        var admin = v1.MapGroup("/admin")
+            .RequireAuthorization(policy => policy.RequireRole("Admin")); ;
+
         /* __________________ CATEGORIES __________________ */
 
-        var category = v1.MapGroup("/categories");
+        var adminCategories = admin.MapGroup("/categories");
 
         // GET ALL
-        category.MapGet("/", async (
+        adminCategories.MapGet("/", async (
             ICategoryService categoryService,
             [FromQuery(Name = "page")] int page = 1,
             [FromQuery(Name = "size")] int size = 10,
@@ -104,7 +108,7 @@ public static class Endpoints
         });
 
         // GET BY ID
-        category.MapGet("/{id}", async (int id, ICategoryService categoryService) =>
+        adminCategories.MapGet("/{id}", async (int id, ICategoryService categoryService) =>
         {
             var category = await categoryService.GetByIdAsync(id);
             return category is null ? Results.NotFound(new ApiResponse<dynamic>
@@ -121,14 +125,14 @@ public static class Endpoints
         });
 
         // CREATE
-        category.MapPost("/", async (CreateCategoryDto createCategoryDto, ICategoryService categoryService) =>
+        adminCategories.MapPost("/", async (CreateCategoryDto createCategoryDto, ICategoryService categoryService) =>
         {
             var createdCategory = await categoryService.AddAsync(createCategoryDto);
             return Results.Created($"/v1/category/{createdCategory.Id}", createdCategory.ToCategoryResponseDto());
         }).AddEndpointFilter<CreateCategoryFilter>();
 
         // UPDATE
-        category.MapPut("/{id}", async (int id, UpdateCategoryDto updateCategoryDto, ICategoryService categoryService) =>
+        adminCategories.MapPut("/{id}", async (int id, UpdateCategoryDto updateCategoryDto, ICategoryService categoryService) =>
         {
             try
             {
@@ -157,7 +161,7 @@ public static class Endpoints
             }
         });
 
-        category.MapDelete("/{id}", async (int id, ICategoryService categoryService) =>
+        adminCategories.MapDelete("/{id}", async (int id, ICategoryService categoryService) =>
         {
             try
             {
